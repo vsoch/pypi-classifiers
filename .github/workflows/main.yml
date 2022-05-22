@@ -1,0 +1,42 @@
+name: Update Classifiers
+
+on:
+  
+  schedule:
+    # Once a week, Friday
+    - cron: '0 0 * * 5'
+
+jobs:
+  formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: conda create --quiet --name update requests
+          
+      - name: Run update script
+        run: |
+          export PATH="/usr/share/miniconda/bin:$PATH"
+          source activate update
+          python update.py
+
+      - name: Update Main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          printf "GitHub Actor: ${GITHUB_ACTOR}\n"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@users.noreply.github.com"
+          git status
+          git add data/classifiers.json
+
+          if git diff-index --quiet HEAD --; then
+             printf "No changes\n"
+          else
+             printf "Changes\n"
+             git commit -a -m "Automated deployment to update classifiers $(date '+%Y-%m-%d')"
+             git push origin main
+          fi

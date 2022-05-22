@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Pypi Classifiers</title>
+    <title>A searchable list</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Muli:200,300,400,700,900" rel="stylesheet"><link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+<body>
+<body>
+    <h1>Pypi Classifier Searcher</h1>	
+    <div id="searchWrapper">
+        <div id="searchBox">
+            <input type="text" placeholder="Search for a classifier...">
+               <div id="numberOfHits">
+				<span></span>
+			</div>
+			<a href="#" class="close-icon-inactive"></a>
+		</div>
+
+		<div id="list">
+                    <ul id="listing">
+                    </ul>
+		</div>
+		<div id="noResult">
+			<p>No result. Try another term or <a href="#" id="reset">reset.</a></p>
+		</div>
+
+		<div id="backgroundCopyright">made with 💛️ by <a style="color:white" href="https://github.com/vsoch" target="_blank">@vsoch</a></div>
+	</div>
+
+</body>
+</html>
+  <script>
+
+document.addEventListener('DOMContentLoaded', function () {
+  fetch('data/classifiers.json')
+    .then(res => res.json())
+    .then(function(data){
+       var ul = document.getElementById("listing");
+       data.forEach(function (item, index) {
+           var li = document.createElement("li");
+           li.appendChild(document.createTextNode(item));
+           ul.appendChild(li);
+       });
+    });
+}, false);   
+  </script>
+  <script  src="assets/js/search.js"></script>
+
+</body>
+</html>
